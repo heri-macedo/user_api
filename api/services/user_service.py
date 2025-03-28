@@ -1,4 +1,6 @@
 import logging
+from deprecated import deprecated
+
 from api.daos.user_dao import UserDAO
 from api.utils.email import Email
 
@@ -18,7 +20,7 @@ class UserService:
 
         return user.to_dict()
 
-
+    @deprecated("This method is deprecated. Use get_users_paginated instead.")
     def get_users(self):
         users_list = [user.to_dict() for user in self.user_dao.get_all()]
         logger.info(f"Returning {len(users_list)} users")
@@ -38,9 +40,9 @@ class UserService:
 
 
     def create_user(self, data):
-        email = Email(data.get("email")).address
-        username = data.get("username")
-        password = data.get("password")
+        email = data.email.address
+        username = data.username
+        password = data.password
 
         if not username:
             msg = "No username provided"
@@ -70,17 +72,25 @@ class UserService:
         return self.user_dao.create(user_data)
 
 
-    def update_user(self, user_id, data):
-        user = self.user_dao.get_user_by_id(user_id)
+    def update_user(self, id, data):
+        current_user = self.user_dao.get_user_by_id(id=id)
+        if not current_user:
+            raise ValueError("User does not exist")
+        if data.get("email") == current_user.email:
+            raise ValueError("Email matches current one.")
+        if data.get("username") == current_user.username:
+            raise ValueError("Username matches current one")
+
+        return self.user_dao.update_user(current_user, data)
+
+
+    def delete_user(self, id):
+        user = self.user_dao.get_user_by_id(id)
         if not user:
-            return ValueError("User does not exist")
-
-        return self.user_dao.update_user(user, data)
-
-
-    def delete_user(self, user_id):
-        user = self.user_dao.get_user_by_id(user_id)
-        if not user:
-            return None
+            raise ValueError("User does not exist")
         self.user_dao.delete(user)
-        return user
+        
+    
+    def soft_delete(self, id):
+        # Implement if time left.
+        raise NotImplementedError

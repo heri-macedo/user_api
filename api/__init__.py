@@ -2,6 +2,7 @@ import os
 import logging
 
 from flask import Flask
+from flask_migrate import Migrate
 from api.models import db
 from api.config import DevelopmentConfig
 from api.controllers.user_controller import user_bp
@@ -14,9 +15,7 @@ def create_app():
     if env == 'development':
         app.config.from_object(DevelopmentConfig)
     db.init_app(app)
-
-    with app.app_context():
-        db.create_all()
+    migrate = Migrate(app, db)
 
     app.register_blueprint(user_bp)
 

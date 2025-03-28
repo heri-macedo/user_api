@@ -1,6 +1,10 @@
 from api.models import db
 from api.models.user_model import User
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 class UserDAO:
     def get_all(self):
         return User.query.limit(2).all()
@@ -30,18 +34,27 @@ class UserDAO:
 
     def update_user(self, user, data: dict):
         user.username = data.get("username", user.username)
-        user.email = data.get("email", user.email)
+        
+        user.email = str(data.get("email", user.email))
         try:
             db.session.commit()
         except Exception as e:
+            logger.error(f"Unexpected error: {str(e)}")
             db.session.rollback()
             raise e
-        return user
+        return userz
     
 
     def update_password(self, data):
         raise NotImplementedError
+    
+    def soft_delte(self, user):
+        raise NotImplementedError
 
     def delete(self, user):
-        db.session.delete(user)
-        db.session.commit()
+        try:
+            db.session.delete(user)
+            db.session.commit()
+        except Exception as e:
+            logger.error(f"Unexpected error: {str(e)}")
+            db.session.rollback()
