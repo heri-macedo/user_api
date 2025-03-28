@@ -4,3 +4,4 @@ python-dotenv==1.0.1
 Flask-Migrate==4.1.0
 pydantic==2.11.0
 Deprecated==1.2.18
+pytest==8.3.5

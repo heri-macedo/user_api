@@ -4,16 +4,19 @@ import logging
 from flask import Flask
 from flask_migrate import Migrate
 from api.models import db
-from api.config import DevelopmentConfig
+from api.config import DevelopmentConfig, TestingConfig
 from api.controllers.user_controller import user_bp
 
 def create_app():
     app = Flask(__name__)
-    env = os.getenv('env', 'development')
+    env = os.getenv('ENV', 'development')
     configure_logging(app)
 
     if env == 'development':
         app.config.from_object(DevelopmentConfig)
+    if env == 'testing':
+        app.config.from_object(TestingConfig)
+
     db.init_app(app)
     migrate = Migrate(app, db)
 

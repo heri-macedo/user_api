@@ -4,24 +4,25 @@ from pydantic import (
     Field,
     field_validator,
     ValidationError,
-    constr
+    constr,
+    StringConstraints
     )
 from api.utils.email import Email # TODO: Check better way to use this class with pydantic to use custom Email class.
 
-from typing import Optional
+from typing import Optional, Annotated
 import re
 
 class BaseUser(BaseModel):
     model_config = ConfigDict(extra='forbid', hide_input_in_errors=True)
 
 class UserUpdate(BaseUser):
-    username: Optional[str] = None
+    username: Optional[Annotated[str, StringConstraints(min_length=8, max_length=80)]] = None
     email: Optional[Email] = None
 
 class UserCreate(BaseUser):
-    username: constr(min_length=8)
+    username: Annotated[str, StringConstraints(min_length=8, max_length=80)]
     email: Email
-    password: constr(min_length=8)
+    password: Annotated[str, StringConstraints(min_length=8, max_length=128)]
 
     @field_validator('username')
     def username_no_special_chars(cls, username):
@@ -33,4 +34,3 @@ class UserCreate(BaseUser):
 class UserListQuerySchema(BaseUser):
     page: Optional[int] = Field(default=1, ge=1)
     per_page: Optional[int] = Field(default=3, ge=1, lt=100)
-

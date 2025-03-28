@@ -27,9 +27,6 @@ class Email:
 
     @classmethod
     def validate(cls, value, *args, **kwargs):
-        logger.debug(f"Kwargs: {kwargs}")
-        logger.debug(f"Args: {args}")
-
         if isinstance(value, cls):
             return value
         if not isinstance(value, str):

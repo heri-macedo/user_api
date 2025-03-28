@@ -76,8 +76,8 @@ class UserService:
         current_user = self.user_dao.get_user_by_id(id=id)
         if not current_user:
             raise ValueError("User does not exist")
-        if data.get("email") == current_user.email:
-            raise ValueError("Email matches current one.")
+        if str(data.get("email")) == current_user.email:
+            raise ValueError("Email matches current one")
         if data.get("username") == current_user.username:
             raise ValueError("Username matches current one")
 

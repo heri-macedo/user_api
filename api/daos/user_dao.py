@@ -42,7 +42,7 @@ class UserDAO:
             logger.error(f"Unexpected error: {str(e)}")
             db.session.rollback()
             raise e
-        return userz
+        return user
     
 
     def update_password(self, data):
