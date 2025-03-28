@@ -11,8 +11,15 @@ user_service = UserService()
 
 @user_bp.route('/', methods=['GET'])
 def list_users():
-    result, status = user_service.get_users()
-    return jsonify(result), status
+    page = request.args.get('page', type=int)
+    print(page)
+    per_page = request.args.get('per_page', type=int)
+    if page and per_page:
+        result = user_service.get_users_paginated(page, per_page)
+    else:
+        result = user_service.get_users()
+
+    return jsonify(result), 200
 
 @user_bp.route('/<int:user_id>', methods=['GET'])
 def get_user(user_id):
@@ -35,7 +42,7 @@ def create_user():
 
     return jsonify({'message': 'User created successfully'}), 201
 
-@user_bp.route('/<int:user_id>', methods=['PUT'])
+@user_bp.route('/<string:email>', methods=['PUT'])
 def update_user(user_id):
     result, status = user_service.update_user(user_id)
     return jsonify(result), status

@@ -3,7 +3,10 @@ from api.models.user_model import User
 
 class UserDAO:
     def get_all(self):
-        return User.query.all()
+        return User.query.limit(2).all()
+
+    def paginate_users(self, page, per_page):
+        return User.query.paginate(page=page, per_page=per_page, error_out=False)
 
     def get_user_by_email(self, email):
         return User.query.filter_by(email=email).first()

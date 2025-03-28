@@ -9,7 +9,21 @@ class UserService:
         self.user_dao = UserDAO()
 
     def get_users(self):
-        return self.user_dao.get_all()
+        users_list = [user.to_dict() for user in self.user_dao.get_all()]
+        logger.info(f'Returning {len(users_list)} users')
+        return users_list
+
+  
+    def get_users_paginated(self, page, per_page):
+        pagination = self.user_dao.paginate_users(page, per_page)
+        return {
+            'users': [user.to_dict() for user in pagination.items],
+            'total': pagination.total,
+            'page': pagination.page,
+            'pages': pagination.pages,
+            'next_page': pagination.next_num,
+            'per_page': per_page
+        }
 
     def create_user(self, data):
         email = Email(data.get('email')).address
