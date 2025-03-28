@@ -14,6 +14,9 @@ class UserDAO:
     def get_user_by_username(self, username):
         return User.query.filter_by(username=username).first()
 
+    def get_user_by_id(self, id):
+        return User.query.filter_by(id=id).first()
+
     def create(self, data):
         new_user = User(
             username=data.get('username'),
