@@ -49,9 +49,13 @@ def create_user():
     return jsonify({'message': 'User created successfully'}), 201
 
 @user_bp.route('/<int:id>', methods=['PUT'])
-def update_user(user_id):
-    result, status = user_service.update_user(user_id)
-    return jsonify(result), status
+def update_user(id):
+    data = request.get_json()
+    if not data:
+        return jsonify({'error': 'No input data provided'}), 400
+
+    user = user_service.update_user(id, data)
+    return jsonify(f"User {user.id} updated"), 201
 
 @user_bp.route('/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):

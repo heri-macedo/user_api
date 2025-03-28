@@ -5,34 +5,42 @@ class UserDAO:
     def get_all(self):
         return User.query.limit(2).all()
 
-    def paginate_users(self, page, per_page):
+    def paginate_users(self, page: int, per_page: int):
         return User.query.paginate(page=page, per_page=per_page, error_out=False)
 
-    def get_user_by_email(self, email):
+    def get_user_by_email(self, email: str):
         return User.query.filter_by(email=email).first()
 
-    def get_user_by_username(self, username):
+    def get_user_by_username(self, username: str):
         return User.query.filter_by(username=username).first()
 
-    def get_user_by_id(self, id):
+    def get_user_by_id(self, id: int):
         return User.query.filter_by(id=id).first()
 
-    def create(self, data):
+    def create(self, data: dict):
         new_user = User(
-            username=data.get('username'),
-            email=data.get('email'),
-            password=data.get('password')
+            username=data.get("username"),
+            email=data.get("email"),
+            password=data.get("password")
         )
     
         db.session.add(new_user)
         db.session.commit()
         return new_user
 
-    def update(self, user, data):
-        user.name = data.get('name', user.name)
-        user.email = data.get('email', user.email)
-        db.session.commit()
+    def update_user(self, user, data: dict):
+        user.username = data.get("username", user.username)
+        user.email = data.get("email", user.email)
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise e
         return user
+    
+
+    def update_password(self, data):
+        raise NotImplementedError
 
     def delete(self, user):
         db.session.delete(user)
