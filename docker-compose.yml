@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  dev:
+    build:
+      context: .
+      target: development
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    environment:
+      - FLASK_ENV=development
+      - FLASK_APP=api:create_app
+      - FLASK_DEBUG=1
+    command: flask run --host=0.0.0.0
+  test:
+    build:
+      context: .
+      target: test
+    environment:
+      - FLASK_ENV=testing
+    command: pytest --maxfail=1 --disable-warnings -q
