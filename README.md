@@ -41,11 +41,15 @@ This file allows Flask to load the correct application factory and enable debug 
 
 The repository includes a Makefile with useful commands:
 
-- Run Tests (WIP):
-  Rebuilds the test image (ignoring cache) and executes the tests in the Docker container.
+- Run Tests Local
+  Run tests locally on venv
   Command: make run-tests-local
 
-- Run Development Environment (WIP):
+- Run Tests :
+  Rebuilds the test image (ignoring cache) and executes the tests in the Docker container.
+  Command: make run-tests
+
+- Run Development Environment:
   Starts the development environment via Docker. This environment mounts your source code so that changes are reflected instantly.
   Command: make run-dev
 
@@ -102,11 +106,11 @@ Locally (outside Docker):
 Make sure to activate your virtual environment and ensure your .flaskenv file is in place. Then run:
 make run-flask
 
-In Docker (Development Environment) (WIP):
+In Docker (Development Environment):
 Use:
 make run-dev
 
-Running Tests (WIP):
+Running Tests:
 To run the test suite in a Docker container:
 make run-tests
 

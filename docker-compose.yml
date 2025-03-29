@@ -19,4 +19,6 @@ services:
       target: test
     environment:
       - FLASK_ENV=testing
-    command: pytest --maxfail=1 --disable-warnings -q
+      - PYTHONPATH=/app
+      - FLASK_APP=api:create_app
+    command: pytest -v --maxfail=1 --disable-warnings

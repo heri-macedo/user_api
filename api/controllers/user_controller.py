@@ -114,4 +114,4 @@ def delete_user(id):
         logger.error(f"An unexpected error occurred: {str(e)}")
         return jsonify({"errors": "An unexpected error occurred"}), 500
 
-    return jsonify({"message": "User deleted successfully"}), 204
+    return jsonify({"message": "User deleted successfully"}), 200

@@ -5,12 +5,12 @@ export PYTHONPATH := $(shell pwd)
 .PHONY: run-tests-local run-flask install-requirements run-dev build-env
 
 run-tests:
-	docker-compose build --no-cache test
-	docker-compose run --rm test
+	docker compose build --no-cache test
+	docker compose run --rm test
 
 run-dev:
-	docker-compose up dev
-# Local Docker problems. Commands not tested completely.
+	docker compose build --no-cache dev
+	docker compose up dev
 
 install-requirements:
 	pip install -r requirements.txt

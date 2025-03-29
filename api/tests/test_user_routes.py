@@ -148,7 +148,7 @@ class TestUpdateUserRoutes:
         payload = {
             "username": "new_username",
         }
-        request = self.client.put(f"/users/{user["id"]}", json=payload)
+        request = self.client.put(f"/users/{user['id']}", json=payload)
         assert request.status_code == 201
         assert request.get_json()["message"] == f"User {user["id"]} updated"
 
@@ -189,7 +189,7 @@ class TestDeleteUserRoutes:
         user = self.user
         response = self.client.delete(f"/users/{user["id"]}")
         assert response.status_code == 200
-        assert response.get_json()["message"] == f"User deleted successfully"
+        assert response.get_json()["message"] == "User deleted successfully"
 
     def test_delete_user_invalid(self):
         user_id_invalid = 50
