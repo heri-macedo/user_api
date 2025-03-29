@@ -24,9 +24,10 @@ class UserCreate(BaseUser):
     email: Email
     password: Annotated[str, StringConstraints(min_length=8, max_length=128)]
 
+    # TODO: Not working.
     @field_validator('username')
     def username_no_special_chars(cls, username):
-        if not re.fullmatch(r'^[A-Za-z0-9_]+$', username):
+        if not re.fullmatch(r'^[a-zA-Z0-9_\-.]*$', username):
             raise ValueError("Username must not contain special characters")
         return username
 
