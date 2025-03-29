@@ -8,32 +8,44 @@ This API provides endpoints for managing users. It supports listing, retrieving,
 
 ### 1. Clone the Repository
 
-git clone <your-repository-url>
-cd <your-repository-directory>
+```
+git clone https://github.com/heri-macedo/user_api.git
+```
+
+cd user_api
 
 ### 2. Create and Activate a Virtual Environment
 
 Create a virtual environment using Python's venv module:
 
+```
 python -m venv venv
+```
 
 Activate the virtual environment:
 
 On Linux/macOS:
+
+```
 source venv/bin/activate
+```
 
 ### 3. Install Dependencies
 
 After activating your virtual environment, install the required packages:
 
+```
 pip install -r requirements.txt
+```
 
 ### 4. Environment Variables
 
 Ensure that you have a .flaskenv file in the root directory with the following content:
 
+```
 FLASK_APP=api:create_app
 FLASK_DEBUG=1
+```
 
 This file allows Flask to load the correct application factory and enable debug mode automatically.
 
@@ -43,19 +55,19 @@ The repository includes a Makefile with useful commands:
 
 - Run Tests Local
   Run tests locally on venv
-  Command: make run-tests-local
+  Command: ```make run-tests-local```
 
 - Run Tests :
   Rebuilds the test image (ignoring cache) and executes the tests in the Docker container.
-  Command: make run-tests
+  Command: ```make run-tests```
 
 - Run Development Environment:
   Starts the development environment via Docker. This environment mounts your source code so that changes are reflected instantly.
-  Command: make run-dev
+  Command: ```make run-dev```
 
 - Run Flask Locally:
   Starts the Flask server locally (outside Docker) on port 5000.
-  Command: make run-flask
+  Command: ```make run-flask```
 
 ---
 
@@ -83,13 +95,18 @@ The following table describes each API route, including its HTTP method, URL, ex
 
 Locally (outside Docker):
 Make sure to activate your virtual environment and ensure your .flaskenv file is in place. Then run:
+```
 make run-flask
+```
 
 In Docker (Development Environment):
 Use:
+```
 make run-dev
+```
 
 Running Tests:
 To run the test suite in a Docker container:
+```
 make run-tests
-
+```
