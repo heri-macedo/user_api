@@ -19,6 +19,12 @@ class UserUpdate(BaseUser):
     username: Optional[Annotated[str, StringConstraints(min_length=8, max_length=80)]] = None
     email: Optional[Email] = None
 
+    @field_validator('username')
+    def username_no_special_chars(cls, username):
+        if re.search(r'[@!#$%^&*()<>?/\|}{~:]', username):
+            raise ValueError("Username must not contain special characters")
+        return username
+
 class UserCreate(BaseUser):
     username: Annotated[str, StringConstraints(min_length=8, max_length=80)]
     email: Email
@@ -27,7 +33,7 @@ class UserCreate(BaseUser):
     # TODO: Not working.
     @field_validator('username')
     def username_no_special_chars(cls, username):
-        if not re.fullmatch(r'^[a-zA-Z0-9_\-.]*$', username):
+        if re.search(r'[@!#$%^&*()<>?/\|}{~:]', username):
             raise ValueError("Username must not contain special characters")
         return username
 

@@ -136,6 +136,16 @@ class TestCreateUserRoutes:
         response = self.client.post('/users/', json=payload)
         assert response.status_code == 400
         assert response.get_json()["errors"] == "Username already in use"
+    
+    def test_create_username_special_char(self):
+        payload = {
+            "username": "@@@@@@@@@@@@@@@@@@",
+            "email": "new_email_test@gmail.com",
+            "password": "teste12345"
+        }
+        response = self.client.post('/users/', json=payload)
+        assert response.status_code == 422
+        assert response.get_json()["errors"][0] == "Value error, Username must not contain special characters"
 
 class TestUpdateUserRoutes:
     @pytest.fixture(autouse=True)
@@ -150,7 +160,7 @@ class TestUpdateUserRoutes:
         }
         request = self.client.put(f"/users/{user['id']}", json=payload)
         assert request.status_code == 201
-        assert request.get_json()["message"] == f"User {user["id"]} updated"
+        assert request.get_json()["message"] == f"User {user['id']} updated"
 
     def test_update_username_invalid(self):
         user = self.user
@@ -178,6 +188,23 @@ class TestUpdateUserRoutes:
         request = self.client.put(f"/users/{user["id"]}", json=payload)
         assert request.status_code == 400
         assert request.get_json()["errors"] == "Email matches current one"
+
+    def test_update_email_invalid_format(self):
+        user = self.user
+        payload = {
+            "email": "foo_bar_doe-example.com",
+        }
+        request = self.client.put(f"/users/{user["id"]}", json=payload)
+        assert request.status_code == 422
+        assert request.get_json()["errors"][0] == "Value error, Invalid email provided"
+
+    def test_update_username_special_char(self):
+        payload = {
+            "username": "@@@@@@@@@@@@@@@@@@"
+        }
+        response = self.client.post('/users/', json=payload)
+        assert response.status_code == 422
+        assert response.get_json()["errors"][0] == "Value error, Username must not contain special characters"
 
 class TestDeleteUserRoutes:
     @pytest.fixture(autouse=True)
